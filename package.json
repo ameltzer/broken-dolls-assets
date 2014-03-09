@@ -1,0 +1,34 @@
+{
+  "name": "broken-dolls-assets",
+  "version": "0.0.0",
+  "description": "The future of storytelling.",
+  "main": "",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/joshuafcole/broken-dolls-assets.git"
+  },
+  "keywords": [
+    "broken",
+    "dolls",
+    "open",
+    "rpg",
+    "romance",
+    "dating",
+    "game"
+  ],
+  "author": "Broken Dolls Team",
+  "license": "All Rights Reserved.",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "through2": "^0.4.1"
+  },
+  "devDependencies": {
+    "browserify": "^3.32.0",
+    "gulp": "^3.5.5",
+    "gulp-changed": "^0.2.1",
+    "gulp-imagemin": "^0.1.5",
+    "gulp-util": "^2.2.14",
+    "gulp-exec": "^1.0.4"
+  }
+}
