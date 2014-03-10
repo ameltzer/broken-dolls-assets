@@ -21,7 +21,9 @@
   "license": "All Rights Reserved.",
   "readmeFilename": "README.md",
   "dependencies": {
-    "through2": "^0.4.1"
+    "through2": "^0.4.1",
+    "underscore": "^1.6.0",
+    "async": "^0.2.10"
   },
   "devDependencies": {
     "browserify": "^3.32.0",
@@ -29,6 +31,11 @@
     "gulp-changed": "^0.2.1",
     "gulp-imagemin": "^0.1.5",
     "gulp-util": "^2.2.14",
-    "gulp-exec": "^1.0.4"
+    "gulp-exec": "^1.0.4",
+    "gulp-awspublish": "0.0.11",
+    "chokidar": "^0.8.1",
+    "simple-ansi": "0.0.1",
+    "gulp-debug": "^0.2.0",
+    "file": "^0.2.2"
   }
 }
