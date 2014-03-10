@@ -2,8 +2,9 @@ var path = require('path');
 
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
-//var debug = require('gulp-debug');
 //var imagemin = require('gulp-imagemin');
+//var debug = require('gulp-debug');
+
 
 var config = require('./config');
 var memo = require('./lib/gulp-memo');
