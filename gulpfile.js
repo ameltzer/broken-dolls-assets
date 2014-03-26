@@ -42,9 +42,8 @@ gulp.task('split', function() {
     var dir = path.dirname(filepath);
     var name = path.basename(filepath);
     name = name.replace(layerMeta, '');
-    return path.join(dir, name);
+    return slugify(path.join(dir, name));
   }, base))
-  .pipe(move(slugify, base))
   .pipe(gulp.dest('cdn/img'));
 });
 
