@@ -3,7 +3,7 @@ var path = require('path');
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
 //var imagemin = require('gulp-imagemin');
-//var debug = require('gulp-debug');
+var gm = require('gulp-gm');
 
 
 var config = require('./config');
@@ -34,6 +34,18 @@ gulp.task('split', function() {
   return gulp.src('screens/**/*.pdn')
   .pipe(memo('_memo/gulp-memo-split.json'))
   .pipe(pdnSplit('_memo/split'))
+  .pipe(gm(function(gmfile) {
+    try {
+      return gmfile.trim();
+    } catch(err) {
+      if(err.code === 'ENOENT') {
+        throw new Error('graphicsmagick must be installed and in the search path.');
+      } else {
+        throw err;
+      }
+    }
+
+  }))
   .pipe(move(function(filepath) {
     filepath = filepath.split(path.sep);
     filepath[1] = 'img';
@@ -42,9 +54,8 @@ gulp.task('split', function() {
     var dir = path.dirname(filepath);
     var name = path.basename(filepath);
     name = name.replace(layerMeta, '');
-    return path.join(dir, name);
+    return slugify(path.join(dir, name));
   }, base))
-  .pipe(move(slugify, base))
   .pipe(gulp.dest('cdn/img'));
 });
 
