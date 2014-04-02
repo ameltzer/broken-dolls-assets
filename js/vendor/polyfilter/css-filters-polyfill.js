@@ -488,7 +488,7 @@
 					properties = this.filters.brightness(amount);
 			}
 			// Drop Shadow
-			var fmatch = value.match(/(drop\-shadow)\(([0-9]+)[px]*\s+([0-9]+)[px]*\s+([0-9]+)[px]*\s+([#0-9]+)\)/i);
+			var fmatch = value.match(/(drop\-shadow)\(([0-9]+)[px]*\s+([0-9]+)[px]*\s+([0-9]+)[px]*\s+([#0-9a-zA-Z]+)\)/i);
 			if(fmatch !== null){
 				var offsetX = parseInt(fmatch[2],10),
 					offsetY = parseInt(fmatch[3],10),
