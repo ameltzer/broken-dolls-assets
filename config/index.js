@@ -1,3 +1,3 @@
-module.exports = {
-  aws: require('./aws')
-};
+var indeks = require('indeks');
+
+module.exports = indeks.index(__dirname);
