@@ -21,6 +21,7 @@
   "license": "All Rights Reserved.",
   "readmeFilename": "README.md",
   "dependencies": {
+    "indeks": "git+ssh://git@github.com/joshuafcole/indeks.git",
     "through2": "^0.4.1",
     "underscore": "^1.6.0",
     "async": "^0.2.10"

@@ -11,12 +11,6 @@ var memo = require('./lib/gulp-memo');
 var move = require('./lib/gulp-move');
 var pdnSplit = require('./lib/gulp-pdn-split');
 
-var publisher = awspublish.create({
-  key: config.aws.key,
-  secret: config.aws.secret,
-  bucket: 'broken-dolls'
-});
-
 function slugify(filepath) {
   var dir = path.dirname(filepath);
   var name = path.basename(filepath);
@@ -75,6 +69,13 @@ gulp.task('js', function() {
 gulp.task('build', ['split', 'images', 'js']);
 
 gulp.task('publish', function() {
+  var publisher = awspublish.create({
+    key: config.aws.key,
+    secret: config.aws.secret,
+    bucket: 'broken-dolls'
+  });
+
+
   var headers = {
     'Cache-Control': 'max-age=31560000, no-transform, public'
   };
