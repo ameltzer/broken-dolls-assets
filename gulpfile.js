@@ -2,7 +2,7 @@ var path = require('path');
 
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
-//var imagemin = require('gulp-imagemin');
+var imagemin = require('gulp-imagemin');
 var gm = require('gulp-gm');
 
 
@@ -10,6 +10,11 @@ var config = require('./config');
 var memo = require('./lib/gulp-memo');
 var move = require('./lib/gulp-move');
 var pdnSplit = require('./lib/gulp-pdn-split');
+
+var imageOpts = {
+  optimizationLevel: 5,
+  pngquant: true
+};
 
 function slugify(filepath) {
   var dir = path.dirname(filepath);
@@ -50,14 +55,15 @@ gulp.task('split', function() {
     name = name.replace(layerMeta, '');
     return slugify(path.join(dir, name));
   }, base))
+  .pipe(imagemin(imageOpts))
   .pipe(gulp.dest('cdn/img'));
 });
 
 gulp.task('images', function() {
   return gulp.src('screens/**/*.png')
   .pipe(memo('_memo/gulp-memo-img.json'))
-  //.pipe(imagemin())
   .pipe(move(slugify))
+  .pipe(imagemin(imageOpts))
   .pipe(gulp.dest('cdn/img'));
 });
 
@@ -87,4 +93,10 @@ gulp.task('publish', function() {
   .pipe(awspublish.reporter());
 
   return pipeline;
+});
+
+gulp.on('stop', function() {
+  process.nextTick(function() {
+    process.exit(0);
+  });
 });
