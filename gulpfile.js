@@ -41,8 +41,8 @@ gulp.task('split', function() {
 
   }))
   .pipe(move(function(filepath) {
-    filepath = filepath.split(path.sep);
-    filepath[1] = 'img';
+    filepath = filepath.split(path.sep).slice(2);
+    filepath = ['cdn', 'img'].concat(filepath);
     filepath = filepath.join(path.sep);
 
     var dir = path.dirname(filepath);

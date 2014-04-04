@@ -24,7 +24,8 @@
     "indeks": "git+ssh://git@github.com/joshuafcole/indeks.git",
     "through2": "^0.4.1",
     "underscore": "^1.6.0",
-    "async": "^0.2.10"
+    "async": "^0.2.10",
+    "gaze": "^0.5.1"
   },
   "devDependencies": {
     "browserify": "^3.32.0",
@@ -38,6 +39,7 @@
     "simple-ansi": "0.0.1",
     "gulp-debug": "^0.2.0",
     "file": "^0.2.2",
-    "gulp-gm": "0.0.3"
+    "gulp-gm": "0.0.3",
+    "chalk": "^0.4.0"
   }
 }
