@@ -2,6 +2,7 @@ var path = require('path');
 
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
+var debug = require('gulp-debug');
 var imagemin = require('gulp-imagemin');
 var gm = require('gulp-gm');
 
@@ -46,16 +47,14 @@ gulp.task('split', function() {
 
   }))
   .pipe(move(function(filepath) {
-    filepath = filepath.split(path.sep).slice(2);
-    filepath = ['cdn', 'img'].concat(filepath);
-    filepath = filepath.join(path.sep);
+    filepath = path.join('cdn', 'img', filepath);
 
     var dir = path.dirname(filepath);
     var name = path.basename(filepath);
     name = name.replace(layerMeta, '');
     return slugify(path.join(dir, name));
   }, base))
-  .pipe(imagemin(imageOpts))
+  //.pipe(imagemin(imageOpts))
   .pipe(gulp.dest('cdn/img'));
 });
 
