@@ -54,7 +54,7 @@ gulp.task('split', function() {
     name = name.replace(layerMeta, '');
     return slugify(path.join(dir, name));
   }, base))
-  //.pipe(imagemin(imageOpts))
+  .pipe(imagemin(imageOpts))
   .pipe(gulp.dest('cdn/img'));
 });
 
