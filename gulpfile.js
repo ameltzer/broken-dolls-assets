@@ -1,8 +1,9 @@
+var async = require('async');
+var chalk = require('chalk');
 var path = require('path');
 
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
-var debug = require('gulp-debug');
 var imagemin = require('gulp-imagemin');
 var gm = require('gulp-gm');
 
@@ -17,6 +18,17 @@ var imageOpts = {
   pngquant: true
 };
 
+var color = {
+  plugin: chalk.green,
+  path: chalk.magenta
+};
+
+function log() {
+  var args = [].slice.apply(arguments);
+  args.unshift('[' + color.plugin('gulp-pdn-split') + ']');
+  console.log.apply(null, args);
+}
+
 function slugify(filepath) {
   var dir = path.dirname(filepath);
   var name = path.basename(filepath);
@@ -29,31 +41,40 @@ function slugify(filepath) {
 
 gulp.task('split', function() {
   var layerMeta = /^[A-Za-z0-9-]+-[Ll]\d+[Nn]ormal\d+[VHvh]/;
-  var base = path.join('_memo', 'img');
+  var base = path.join('_memo', 'split');
+  var offsets = {};
 
   return gulp.src('screens/**/*.pdn')
   .pipe(memo('_memo/gulp-memo-split.json'))
   .pipe(pdnSplit('_memo/split'))
-  .pipe(gm(function(gmfile) {
-    try {
-      return gmfile.trim();
-    } catch(err) {
-      if(err.code === 'ENOENT') {
-        throw new Error('graphicsmagick must be installed and in the search path.');
-      } else {
-        throw err;
-      }
-    }
-
-  }))
   .pipe(move(function(filepath) {
-    filepath = path.join('cdn', 'img', filepath);
-
     var dir = path.dirname(filepath);
     var name = path.basename(filepath);
     name = name.replace(layerMeta, '');
     return slugify(path.join(dir, name));
   }, base))
+  .pipe(gm(function(gmfile, done) {
+    async.series([
+      function trim(next) {
+        gmfile = gmfile.trim();
+        next(null, gmfile);
+      },
+      function getInfo(next) {
+        gmfile.identify('%@', next);
+      }
+    ], function finished(err, results) {
+      if(err) {
+        return done(err);
+      }
+
+      var parsed = results[1].match(/(\d+)x(\d+)\+(\d+)\+(\d+)/);
+      var filename = results[0].source;
+      var offset = {x: parsed[3], y: parsed[4]};
+      log('Trimmed', filename.replace(path.join(process.cwd(), path.sep), ''), offset);
+      offsets[filename] = offset;
+      done(null, results[0]);
+    });
+  }, {imageMagick: true}))
   .pipe(imagemin(imageOpts))
   .pipe(gulp.dest('cdn/img'));
 });
