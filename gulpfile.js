@@ -1,6 +1,8 @@
+var _ = require('underscore');
 var async = require('async');
 var chalk = require('chalk');
 var path = require('path');
+var fs = require('fs');
 
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
@@ -67,16 +69,34 @@ gulp.task('split', function() {
         return done(err);
       }
 
-      var parsed = results[1].match(/(\d+)x(\d+)\+(\d+)\+(\d+)/);
       var filename = results[0].source;
-      var offset = {x: parsed[3], y: parsed[4]};
-      log('Trimmed', filename.replace(path.join(process.cwd(), path.sep), ''), offset);
-      offsets[filename] = offset;
+      var relative = filename.replace(path.join(process.cwd(), '_memo', 'split', path.sep), '');
+
+      var parsed = results[1].match(/(\d+)x(\d+)\+(\d+)\+(\d+)/);
+      var offset = {x: parseInt(parsed[3], 10), y: parseInt(parsed[4], 10)};
+      log('Trimmed', relative, offset);
+
+
+      var dirname = path.dirname(relative);
+      offsets[dirname] = offsets[dirname] || {};
+      offsets[dirname][path.basename(relative)] = offset;
       done(null, results[0]);
     });
   }, {imageMagick: true}))
   .pipe(imagemin(imageOpts))
-  .pipe(gulp.dest('cdn/img'));
+  .pipe(gulp.dest('cdn/img'))
+  .on('end', function() {
+    log('Writing offset files');
+    var root = path.join(process.cwd(), 'cdn', 'img');
+    async.each(_.pairs(offsets), function(file, next) {
+      var relative = path.join(file[0], 'offsets.json');
+      var filepath = path.join(root, relative);
+      var content = JSON.stringify(file[1], null, 2);
+      log('-', filepath);
+      fs.writeFileSync(filepath, content);
+      next();
+    });
+  });
 });
 
 gulp.task('images', function() {
