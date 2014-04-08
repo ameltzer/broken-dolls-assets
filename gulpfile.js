@@ -112,7 +112,13 @@ gulp.task('js', function() {
   .pipe(gulp.dest('cdn/js'));
 });
 
-gulp.task('build', ['split', 'images', 'js']);
+gulp.task('fonts', function() {
+  return gulp.src('font/**/*')
+  .pipe(gulp.dest('cdn/font'));
+});
+
+
+gulp.task('build', ['split', 'images', 'js', 'fonts']);
 
 gulp.task('publish', function() {
   var publisher = awspublish.create({
